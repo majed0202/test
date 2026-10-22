@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شفاء بلس للخدمات الطبية | رعاية صحية منزلية في حمص</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Cairo & Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0f2b48',     /* أزرق داكن */
+                            navy: '#1a365d',     /* كحلي احترافي */
+                            teal: '#00a896',     /* تركوازي طبي */
+                            emerald: '#0d9488',  /* أخضر عناية */
+                            light: '#f8fafc',    /* خلفية ناصعة */
+                            accent: '#e0f2fe'   /* لمسة سماوية */
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #00a896;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0f2b48;
+        }
+
+        /* Pulse Animation for Floating WhatsApp */
+        @keyframes pulse-subtle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .whatsapp-btn {
+            animation: pulse-subtle 3s infinite ease-in-out;
+        }
+
+        /* Active Navigation Tab Style */
+        .nav-link.active {
+            color: #00a896;
+            font-weight: 700;
+            border-bottom: 2px solid #00a896;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease;
+        }
+        .accordion-content.active {
+            max-height: 300px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen relative selection:bg-brand-teal selection:text-white">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-5 left-5 z-50 flex flex-col gap-3 pointer-events-none"></div>
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('home')">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-dark to-brand-teal flex items-center justify-center text-white shadow-md shadow-brand-teal/20">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.3"></circle>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-1">
+                            <span class="text-2xl font-black text-brand-dark tracking-tight">شفاء</span>
+                            <span class="text-2xl font-black text-brand-teal">بلس</span>
+                        </div>
+                        <p class="text-[10px] text-slate-500 font-semibold tracking-wider">للخدمات الطبية المنزلية</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center gap-1 lg:gap-2">
+                    <button onclick="navigateTo('home')" id="nav-home" class="nav-link active px-3 py-2 text-sm font-medium text-slate-700 hover:text-brand-teal transition">الرئيسية</button>
+                    <button onclick="navigateTo('services')" id="nav-services" class="nav-link px-3 py-2 text-sm font-medium text-slate-700 hover:text-brand-teal transition">خدماتنا</button>
+                    <button onclick="navigateTo('about')" id="nav-about" class="nav-link px-3 py-2 text-sm font-medium text-slate-700 hover:text-brand-teal transition">من نحن</button>
+                    <button onclick="navigateTo('faq')" id="nav-faq" class="nav-link px-3 py-2 text-sm font-medium text-slate-700 hover:text-brand-teal transition">الأسئلة الشائعة</button>
+                    <button onclick="navigateTo('contact')" id="nav-contact" class="nav-link px-3 py-2 text-sm font-medium text-slate-700 hover:text-brand-teal transition">التواصل</button>
+                </nav>
+
+                <!-- Action Buttons -->
+                <div class="hidden md:flex items-center gap-3">
+                    <button onclick="openAdminModal()" class="text-slate-400 hover:text-brand-dark p-2 text-sm font-semibold transition" title="لوحة التحكم الإدارية">
+                        <i class="fa-solid fa-user-shield text-lg"></i>
+                    </button>
+                    <button onclick="navigateTo('book')" class="bg-gradient-to-r from-brand-teal to-brand-emerald text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-md shadow-brand-teal/20 hover:opacity-95 transition transform active:scale-95 flex items-center gap-2">
+                        <i class="fa-solid fa-calendar-plus"></i>
+                        <span>طلب خدمة</span>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center gap-2">
+                    <button onclick="navigateTo('book')" class="bg-brand-teal text-white text-xs px-3 py-2 rounded-lg font-bold">
+                        طلب خدمة
+                    </button>
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="p-2 text-slate-600 rounded-lg focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Navigation Drawer -->
+            <div id="mobile-menu" class="hidden md:hidden pb-6 pt-2 border-t border-slate-100 flex flex-col gap-2">
+                <button onclick="navigateTo('home'); toggleMobileMenu();" class="text-right px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 rounded-lg">الرئيسية</button>
+                <button onclick="navigateTo('services'); toggleMobileMenu();" class="text-right px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 rounded-lg">خدماتنا</button>
+                <button onclick="navigateTo('about'); toggleMobileMenu();" class="text-right px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 rounded-lg">من نحن</button>
+                <button onclick="navigateTo('faq'); toggleMobileMenu();" class="text-right px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 rounded-lg">الأسئلة الشائعة</button>
+                <button onclick="navigateTo('contact'); toggleMobileMenu();" class="text-right px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 rounded-lg">التواصل</button>
+                <button onclick="openAdminModal(); toggleMobileMenu();" class="text-right px-4 py-2.5 text-sm font-semibold text-slate-500 hover:bg-slate-50 rounded-lg flex items-center gap-2">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span>لوحة التحكمالإدارية</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dynamic Content Views -->
+    <main class="flex-grow">
+
+        <!-- VIEW: HOME PAGE -->
+        <section id="view-home" class="page-view space-y-16 py-8 md:py-12">
+            <!-- Hero Section -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-7 space-y-6 text-center lg:text-right">
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-teal/10 text-brand-teal text-xs font-bold border border-brand-teal/20">
+                            <span class="w-2 h-2 rounded-full bg-brand-teal animate-ping"></span>
+                            <span>رعاية صحية منزلية متكاملة في حمص وما حولها</span>
+                        </div>
+                        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-brand-dark leading-tight">
+                            رعاية صحية أقرب إليك، <br>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-teal to-brand-emerald">في راحة منزلك</span>
+                        </h1>
+                        <p class="text-slate-600 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto lg:mx-0 font-normal">
+                            نفرّغ طاقتنا لتقديم أفضل خدمات التمريض المنزلي، سحب التحاليل الطبية، ورعاية كبار السن بأعلى معايير الاهتمام والاحترام والخصوصية لتنعم أنت وعائلتك بالطمأنينة.
+                        </p>
+                        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                            <button onclick="navigateTo('book')" class="w-full sm:w-auto bg-brand-dark hover:bg-slate-800 text-white px-8 py-3.5 rounded-xl font-bold shadow-lg shadow-brand-dark/20 transition flex items-center justify-center gap-3">
+                                <span>احجز موعدك الآن</span>
+                                <i class="fa-solid fa-arrow-left text-sm"></i>
+                            </button>
+                            <a id="hero-whatsapp-btn" href="https://wa.me/963911223344" target="_blank" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-600 text-white px-7 py-3.5 rounded-xl font-bold transition flex items-center justify-center gap-2 shadow-md shadow-emerald-500/20">
+                                <i class="fa-brands fa-whatsapp text-lg"></i>
+                                <span>تواصل سريع عبر واتساب</span>
+                            </a>
+                        </div>
+                        
+                        <!-- Trust Indicators -->
+                        <div class="pt-6 border-t border-slate-200/60 grid grid-cols-3 gap-4 text-center lg:text-right">
+                            <div>
+                                <h4 class="font-extrabold text-brand-dark text-lg sm:text-xl">100%</h4>
+                                <p class="text-xs text-slate-500 font-semibold">اهتمام بالخصوصية</p>
+                            </div>
+                            <div>
+                                <h4 class="font-extrabold text-brand-dark text-lg sm:text-xl">تغطية واسعة</h4>
+                                <p class="text-xs text-slate-500 font-semibold">حمص وأحيائها</p>
+                            </div>
+                            <div>
+                                <h4 class="font-extrabold text-brand-dark text-lg sm:text-xl">استجابة سريعة</h4>
+                                <p class="text-xs text-slate-500 font-semibold">تنسيق سلس وفوري</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Graphic Illustration Banner -->
+                    <div class="lg:col-span-5 flex justify-center">
+                        <div class="relative w-full max-w-md bg-gradient-to-br from-brand-dark to-slate-900 rounded-3xl p-8 text-white shadow-2xl overflow-hidden border border-slate-700">
+                            <!-- SVG Geometric Background Decor -->
+                            <div class="absolute -top-10 -right-10 w-40 h-40 bg-brand-teal/20 rounded-full blur-2xl"></div>
+                            <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-brand-emerald/20 rounded-full blur-2xl"></div>
+                            
+                            <div class="relative z-10 space-y-6">
+                                <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center text-brand-teal border border-white/20">
+                                    <i class="fa-solid fa-house-medical text-3xl"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold">لماذا تختار شفاء بلس؟</h3>
+                                <ul class="space-y-4 text-sm text-slate-200">
+                                    <li class="flex items-start gap-3">
+                                        <i class="fa-solid fa-circle-check text-brand-teal mt-1"></i>
+                                        <span>توفير عناء التنقل والانتظار في المراكز الطبية.</span>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <i class="fa-solid fa-circle-check text-brand-teal mt-1"></i>
+                                        <span>عناية فائقة بالمرضى وكبار السن برفق وود.</span>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <i class="fa-solid fa-circle-check text-brand-teal mt-1"></i>
+                                        <span>دقة وتنسيق تام للتحاليل المخبرية.</span>
+                                    </li>
+                                </ul>
+                                <div class="p-4 bg-white/5 rounded-2xl border border-white/10 flex items-center gap-3">
+                                    <i class="fa-solid fa-phone-volume text-brand-teal text-xl animate-bounce"></i>
+                                    <div>
+                                        <p class="text-xs text-slate-400">خدمة الاستفسار المباشر</p>
+                                        <p class="font-bold text-sm tracking-wider" id="hero-phone-display">+963 911 223 344</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Services Preview Section -->
+            <div class="bg-slate-100/70 py-12 border-y border-slate-200/60">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-2xl mx-auto mb-10 space-y-2">
+                        <h2 class="text-2xl sm:text-3xl font-black text-brand-dark">خدماتنا الطبية الأساسية</h2>
+                        <p class="text-slate-600 text-sm">نقدم مجموعة متكاملة من خدمات الرعاية الميدانية للوصول لراحتكم</p>
+                    </div>
+
+                    <div id="home-services-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Dynamic JavaScript rendered content -->
+                    </div>
+
+                    <div class="text-center mt-8">
+                        <button onclick="navigateTo('services')" class="inline-flex items-center gap-2 text-brand-teal hover:text-brand-dark font-bold text-sm transition">
+                            <span>استعراض كافة تفاصيل الخدمات</span>
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How to Book Steps Section -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-12 space-y-2">
+                    <h2 class="text-2xl sm:text-3xl font-black text-brand-dark">خطوات طلب الخدمة ببساطة</h2>
+                    <p class="text-slate-600 text-sm">آلية واضحة وسريعة لتنسيق زيارتنا المنزلية لكم</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 relative">
+                    <!-- Step 1 -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm text-center space-y-4 relative">
+                        <div class="w-12 h-12 bg-brand-teal/10 text-brand-teal rounded-full flex items-center justify-center font-black text-lg mx-auto">1</div>
+                        <h3 class="font-bold text-lg text-brand-dark">اختر الخدمة المطلوبة</h3>
+                        <p class="text-slate-600 text-xs leading-relaxed">حدّد الخدمة الطبية أو الرعاية التي يحتاجها المريض عبر النموذج أو التواصل المباشر.</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm text-center space-y-4 relative">
+                        <div class="w-12 h-12 bg-brand-teal/10 text-brand-teal rounded-full flex items-center justify-center font-black text-lg mx-auto">2</div>
+                        <h3 class="font-bold text-lg text-brand-dark">حدد الموعد والحي</h3>
+                        <p class="text-slate-600 text-xs leading-relaxed">أدخل عنوانكم في مدينة حمص أو المناطق القريبة والوقت الأنسب للزيارة.</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm text-center space-y-4 relative">
+                        <div class="w-12 h-12 bg-brand-teal/10 text-brand-teal rounded-full flex items-center justify-center font-black text-lg mx-auto">3</div>
+                        <h3 class="font-bold text-lg text-brand-dark">نصلك لمنزلك</h3>
+                        <p class="text-slate-600 text-xs leading-relaxed">يتواصل معك فريقنا للتأكيد والوصول إلى موقعكم وتقديم الخدمة المطلوبة.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features / Quality Section -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-brand-dark rounded-3xl p-8 sm:p-12 text-white grid lg:grid-cols-2 gap-8 items-center shadow-xl">
+                    <div class="space-y-6">
+                        <h2 class="text-2xl sm:text-3xl font-black">مزايا التعامل مع «شفاء بلس»</h2>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            نضع أمن وراحة المريض في مقدمة أولوياتنا، ونعمل بعناية فائقة لتنفيذ كافة الخدمات بكل تنظيم واحترام.
+                        </p>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-brand-teal shrink-0">
+                                    <i class="fa-solid fa-user-lock text-lg"></i>
+                                </div>
+                                <span class="text-xs font-semibold">سرية تامة وخصوصية</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-brand-teal shrink-0">
+                                    <i class="fa-solid fa-heart-pulse text-lg"></i>
+                                </div>
+                                <span class="text-xs font-semibold">حسن معاملة ورفق</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-brand-teal shrink-0">
+                                    <i class="fa-solid fa-clock text-lg"></i>
+                                </div>
+                                <span class="text-xs font-semibold">مواعيد دقيقة ومحددة</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-brand-teal shrink-0">
+                                    <i class="fa-solid fa-map-location-dot text-lg"></i>
+                                </div>
+                                <span class="text-xs font-semibold">تغطية أحياء حمص</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center">
+                        <div class="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-4 max-w-sm">
+                            <i class="fa-solid fa-hand-holding-hand text-5xl text-brand-teal"></i>
+                            <h3 class="font-bold text-lg">عناية تناسب احتياجات عائلتك</h3>
+                            <p class="text-xs text-slate-300 leading-relaxed">سواء كنت بحاجة لرعاية يومية لكبار السن أو إجراء تحليل سريع في المنزل، نحن هنا لخدمتكم.</p>
+                            <button onclick="navigateTo('book')" class="w-full bg-brand-teal hover:bg-brand-emerald text-white text-xs font-bold py-2.5 rounded-xl transition">
+                                اطلب خدمة منزلية الآن
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mini FAQ Accordion Preview -->
+            <div class="max-w-4xl mx-auto px-4">
+                <div class="text-center mb-8 space-y-2">
+                    <h2 class="text-2xl font-black text-brand-dark">أسئلة شائعة</h2>
+                    <p class="text-slate-500 text-xs">إجابات عن الاستفسارات الأكثر تكراراً</p>
+                </div>
+                <div id="home-faq-container" class="space-y-3">
+                    <!-- JavaScript dynamic rendering -->
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW: SERVICES PAGE -->
+        <section id="view-services" class="page-view hidden py-10 space-y-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-12 space-y-3">
+                    <h1 class="text-3xl sm:text-4xl font-black text-brand-dark">خدمات الرعاية الصحية المنزلية</h1>
+                    <p class="text-slate-600 text-sm">نقدم خدماتنا الطبية المتنوعة في منازلكم بحمص لضمان راحتكم وسلامتكم.</p>
+                </div>
+
+                <!-- Comprehensive Services List Container -->
+                <div id="full-services-list" class="space-y-8">
+                    <!-- Dynamically populated from JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW: ABOUT PAGE -->
+        <section id="view-about" class="page-view hidden py-10">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6">
+                <div class="bg-white rounded-3xl p-8 sm:p-12 shadow-sm border border-slate-200/80 space-y-8">
+                    <div class="text-center space-y-3 border-b border-slate-100 pb-6">
+                        <span class="text-brand-teal font-bold text-xs">عن الشركة</span>
+                        <h1 class="text-3xl font-black text-brand-dark">شفاء بلس للخدمات الطبية</h1>
+                        <p class="text-slate-500 text-sm max-w-xl mx-auto">تسهيل الوصول إلى خدمات الرعاية الصحية المنزلية في مدينة حمص بأعلى مستويات الخصوصية والاهتمام.</p>
+                    </div>
+
+                    <div class="space-y-6 text-slate-700 leading-relaxed text-sm">
+                        <h2 class="text-xl font-bold text-brand-dark flex items-center gap-2">
+                            <i class="fa-solid fa-bullseye text-brand-teal"></i>
+                            <span>رؤيتنا ورسالتنا</span>
+                        </h2>
+                        <p>
+                            تأسست «شفاء بلس» لتكون الخيار الموثوق والأول للعائلات في مدينة حمص والمناطق المجاورة التي تبحث عن تقديم أفضل عناية طبية وصحية لأفرادها في بيئتهم المنزلية المريحة. نؤمن بأن الشفاء والراحة تبدأ من المنزل، لذلك نضع الاحترافية والرحمة وحسن التعامل في مقدمة كل خدمة نقدمها.
+                        </p>
+
+                        <h2 class="text-xl font-bold text-brand-dark flex items-center gap-2 pt-4">
+                            <i class="fa-solid fa-shield-heart text-brand-teal"></i>
+                            <span>قيمنا الأساسية</span>
+                        </h2>
+                        <div class="grid sm:grid-cols-2 gap-4 pt-2">
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+                                <h3 class="font-bold text-brand-dark text-base mb-1">الاحترام والخصوصية</h3>
+                                <p class="text-xs text-slate-600">نتعامل مع كل منزل ببالغ الاحترام والسرية التامة لخصوصيات المرضى وعائلاتهم.</p>
+                            </div>
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+                                <h3 class="font-bold text-brand-dark text-base mb-1">الرحمة والاهتمام</h3>
+                                <p class="text-xs text-slate-600">نحرص على تقديم الرعاية برفق وولاء إنساني يخفف عن المريض ويسعد عائلته.</p>
+                            </div>
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+                                <h3 class="font-bold text-brand-dark text-base mb-1">سرعة التنسيق</h3>
+                                <p class="text-xs text-slate-600">نعمل على تنظيم المواعيد بسرعة وسلاسة لتلبية احتياجاتكم فور طلبها.</p>
+                            </div>
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+                                <h3 class="font-bold text-brand-dark text-base mb-1">الوضوح والشفافية</h3>
+                                <p class="text-xs text-slate-600">تقديم كافة تفاصيل الخدمة والإجابة عن الاستفسارات بوضوح تام للعميل.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW: BOOKING FORM PAGE -->
+        <section id="view-book" class="page-view hidden py-10">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6">
+                <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-md border border-slate-200/80 space-y-6">
+                    <div class="text-center space-y-2 border-b border-slate-100 pb-4">
+                        <h1 class="text-2xl sm:text-3xl font-black text-brand-dark">طلب خدمة منزلية</h1>
+                        <p class="text-xs text-slate-500">يرجى ملء النموذج أدناه، وسيتواصل معك فريقنا لتأكيد كافة التفاصيل.</p>
+                    </div>
+
+                    <form id="service-booking-form" onsubmit="handleBookingSubmit(event)" class="space-y-5">
+                        <!-- Draft restored indicator -->
+                        <div id="draft-notice" class="hidden p-3 bg-amber-50 text-amber-800 text-xs rounded-xl border border-amber-200 flex items-center justify-between">
+                            <span><i class="fa-solid fa-floppy-disk ml-1"></i> تم استرجاع مسودة البيانات غير المكتملة تلقائياً.</span>
+                            <button type="button" onclick="clearBookingDraft()" class="text-amber-900 font-bold underline">مسح المسودة</button>
+                        </div>
+
+                        <!-- Full Name -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-2">الاسم الكامل <span class="text-red-500">*</span></label>
+                            <input type="text" id="book-name" required placeholder="مثال: أحمد المحمد" oninput="saveBookingDraft()" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal">
+                        </div>
+
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <!-- Phone Number -->
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-2">رقم الهاتف / الواتساب <span class="text-red-500">*</span></label>
+                                <input type="tel" id="book-phone" required placeholder="09xxxxxxxx" oninput="saveBookingDraft()" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal" dir="ltr">
+                            </div>
+
+                            <!-- Service Type -->
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-2">نوع الخدمة المطلوبة <span class="text-red-500">*</span></label>
+                                <select id="book-service" required onchange="saveBookingDraft()" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal bg-white">
+                                    <option value="">-- اختر الخدمة --</option>
+                                    <!-- Dynamic options filled via JS -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <!-- Region / District -->
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-2">المنطقة / الحي (في حمص) <span class="text-red-500">*</span></label>
+                                <input type="text" id="book-location" required placeholder="مثال: حي الإنشاءات، الوعر، الخضر..." oninput="saveBookingDraft()" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal">
+                            </div>
+
+                            <!-- Preferred Time -->
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-2">الموعد المفضّل للزيارة <span class="text-red-500">*</span></label>
+                                <input type="text" id="book-date" required placeholder="مثال: غداً الساعة 10 صباحاً" oninput="saveBookingDraft()" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal">
+                            </div>
+                        </div>
+
+                        <!-- Optional Notes -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-2">ملاحظات إضافية (اختياري)</label>
+                            <textarea id="book-notes" rows="3" placeholder="أي تفاصيل ترغب بإضافتها لتجهيز الخدمة..." oninput="saveBookingDraft()" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal"></textarea>
+                        </div>
+
+                        <div class="pt-3">
+                            <button type="submit" class="w-full bg-gradient-to-r from-brand-teal to-brand-emerald text-white font-bold py-3.5 rounded-xl shadow-lg shadow-brand-teal/20 hover:opacity-95 transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-paper-plane"></i>
+                                <span>إرسال طلب الخدمة</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW: FAQ PAGE -->
+        <section id="view-faq" class="page-view hidden py-10">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6">
+                <div class="text-center max-w-2xl mx-auto mb-10 space-y-2">
+                    <h1 class="text-3xl font-black text-brand-dark">الأسئلة الشائعة</h1>
+                    <p class="text-slate-600 text-sm">نستعرض هنا أبرز الأسئلة والإجابات حول كيفية طلب واستلام الخدمات الطبية المنزلية.</p>
+                </div>
+
+                <div id="full-faq-container" class="space-y-4">
+                    <!-- Javascript Dynamic Accordion -->
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW: CONTACT PAGE -->
+        <section id="view-contact" class="page-view hidden py-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-12 gap-8">
+                    <!-- Contact Info Cards -->
+                    <div class="lg:col-span-5 space-y-6">
+                        <div>
+                            <h1 class="text-3xl font-black text-brand-dark mb-2">تواصل معنا</h1>
+                            <p class="text-slate-600 text-sm">نحن هنا للإجابة على استفساراتكم وتنسيق الطلبات طوال اليوم.</p>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="p-5 bg-white rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl bg-brand-teal/10 text-brand-teal flex items-center justify-center text-xl shrink-0">
+                                    <i class="fa-solid fa-phone"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-500 font-semibold">رقم الهاتف</p>
+                                    <p id="contact-info-phone" class="font-bold text-brand-dark text-base" dir="ltr">+963 911 223 344</p>
+                                </div>
+                            </div>
+
+                            <div class="p-5 bg-white rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center text-xl shrink-0">
+                                    <i class="fa-brands fa-whatsapp"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-500 font-semibold">محادثة واتساب مباشرة</p>
+                                    <p id="contact-info-whatsapp" class="font-bold text-emerald-600 text-base" dir="ltr">+963 911 223 344</p>
+                                </div>
+                            </div>
+
+                            <div class="p-5 bg-white rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl bg-brand-dark/10 text-brand-dark flex items-center justify-center text-xl shrink-0">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-500 font-semibold">النطاق والموقع</p>
+                                    <p id="contact-info-address" class="font-bold text-brand-dark text-base">حمص، سوريا - النطاق الخدمي للمدينة وما حولها</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Interactive Mock Map -->
+                        <div class="bg-slate-200 h-48 rounded-2xl relative overflow-hidden flex items-center justify-center border border-slate-300">
+                            <div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image: url('https://placehold.co/600x300/e2e8f0/0f2b48?text=حمص+وما+حولها');"></div>
+                            <div class="relative z-10 text-center bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md border border-slate-200 max-w-xs">
+                                <i class="fa-solid fa-map-pin text-2xl text-red-500 mb-1 animate-bounce"></i>
+                                <h4 class="font-bold text-xs text-brand-dark">مركز تغطية «شفاء بلس»</h4>
+                                <p class="text-[10px] text-slate-500">نصل إليكم في مختلف أحياء مدينة حمص</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Inquiry Form -->
+                    <div class="lg:col-span-7">
+                        <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-md border border-slate-200/80 space-y-6">
+                            <h2 class="text-xl font-bold text-brand-dark">أرسل لنا استفساراً</h2>
+                            <form onsubmit="handleInquirySubmit(event)" class="space-y-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-2">الاسم</label>
+                                    <input type="text" required placeholder="اسمك الكريم" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-brand-teal">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-2">رقم التواصل</label>
+                                    <input type="tel" required placeholder="09xxxxxxxx" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-brand-teal" dir="ltr">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-2">الرسالة / الاستفسار</label>
+                                    <textarea rows="4" required placeholder="اكتب استفسارك هنا..." class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-brand-teal"></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-brand-dark hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl transition">
+                                    إرسال الاستفسار
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW: ADMIN PANEL (Protected Dashboard) -->
+        <section id="view-admin" class="page-view hidden py-8 bg-slate-100 min-h-[80vh]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+                <!-- Dashboard Top Bar -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-1 bg-brand-dark text-white rounded-lg text-xs font-bold">إدارة</span>
+                            <h1 class="text-xl font-bold text-brand-dark">لوحة التحكم والمتابعة</h1>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-1">إدارة طلبات العملاء، الخدمات، وإعدادات الشركة</p>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <button onclick="adminLogout()" class="px-4 py-2 bg-red-50 text-red-600 hover:bg-red-100 font-bold text-xs rounded-xl transition">
+                            <i class="fa-solid fa-right-from-bracket ml-1"></i> تسجيل الخروج
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Admin Tabs Menu -->
+                <div class="flex border-b border-slate-200 bg-white rounded-xl p-1.5 shadow-sm overflow-x-auto">
+                    <button id="admin-tab-btn-orders" onclick="switchAdminTab('orders')" class="px-5 py-2.5 text-xs font-bold rounded-lg transition text-white bg-brand-teal">
+                        <i class="fa-solid fa-list-check ml-1"></i> إدارة الطلبات (<span id="admin-orders-count">0</span>)
+                    </button>
+                    <button id="admin-tab-btn-services" onclick="switchAdminTab('services')" class="px-5 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-50 rounded-lg transition">
+                        <i class="fa-solid fa-briefcase-medical ml-1"></i> إدارة الخدمات
+                    </button>
+                    <button id="admin-tab-btn-settings" onclick="switchAdminTab('settings')" class="px-5 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-50 rounded-lg transition">
+                        <i class="fa-solid fa-sliders ml-1"></i> إعدادات التواصل والموقع
+                    </button>
+                </div>
+
+                <!-- TAB 1: ORDERS MANAGEMENT -->
+                <div id="admin-tab-orders" class="space-y-4">
+                    <!-- Filter and Search controls -->
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 flex flex-col md:flex-row gap-4 justify-between items-center">
+                        <div class="relative w-full md:w-72">
+                            <i class="fa-solid fa-magnifying-glass absolute right-3 top-3 text-slate-400 text-xs"></i>
+                            <input type="text" id="order-search-input" onkeyup="renderAdminOrders()" placeholder="بحث بالاسم، الرقم، أو الحي..." class="w-full pr-8 pl-4 py-2 text-xs rounded-lg border border-slate-200 focus:outline-none focus:border-brand-teal">
+                        </div>
+
+                        <div class="flex items-center gap-2 w-full md:w-auto overflow-x-auto">
+                            <span class="text-xs font-bold text-slate-500 shrink-0">تصفية الحالة:</span>
+                            <button onclick="filterOrdersByStatus('all')" class="status-filter-btn px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-200 text-slate-800">الكل</button>
+                            <button onclick="filterOrdersByStatus('جديد')" class="status-filter-btn px-3 py-1.5 text-xs font-bold rounded-lg bg-blue-100 text-blue-800">جديد</button>
+                            <button onclick="filterOrdersByStatus('قيد التواصل')" class="status-filter-btn px-3 py-1.5 text-xs font-bold rounded-lg bg-amber-100 text-amber-800">قيد التواصل</button>
+                            <button onclick="filterOrdersByStatus('مؤكد')" class="status-filter-btn px-3 py-1.5 text-xs font-bold rounded-lg bg-emerald-100 text-emerald-800">مؤكد</button>
+                            <button onclick="filterOrdersByStatus('مكتمل')" class="status-filter-btn px-3 py-1.5 text-xs font-bold rounded-lg bg-purple-100 text-purple-800">مكتمل</button>
+                            <button onclick="filterOrdersByStatus('ملغى')" class="status-filter-btn px-3 py-1.5 text-xs font-bold rounded-lg bg-rose-100 text-rose-800">ملغى</button>
+                        </div>
+                    </div>
+
+                    <!-- Orders Table View -->
+                    <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-right text-xs">
+                                <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold">
+                                    <tr>
+                                        <th class="p-4">رقم الطلب</th>
+                                        <th class="p-4">العميل</th>
+                                        <th class="p-4">الخدمة</th>
+                                        <th class="p-4">المنطقة والحي</th>
+                                        <th class="p-4">الموعد المفضّل</th>
+                                        <th class="p-4">الحالة</th>
+                                        <th class="p-4">تاريخ الطلب</th>
+                                        <th class="p-4 text-center">الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-orders-table-body" class="divide-y divide-slate-100">
+                                    <!-- Dynamic rows loaded via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: SERVICES MANAGEMENT -->
+                <div id="admin-tab-services" class="hidden space-y-6">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-base font-bold text-brand-dark">قائمة الخدمات المتاحة</h2>
+                        <button onclick="openAddServiceModal()" class="px-4 py-2 bg-brand-teal text-white font-bold text-xs rounded-xl shadow-md transition hover:bg-brand-emerald">
+                            <i class="fa-solid fa-plus ml-1"></i> إضافة خدمة جديدة
+                        </button>
+                    </div>
+
+                    <div id="admin-services-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Javascript dynamic rendering -->
+                    </div>
+                </div>
+
+                <!-- TAB 3: SETTINGS MANAGEMENT -->
+                <div id="admin-tab-settings" class="hidden">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 max-w-2xl mx-auto space-y-6 shadow-sm">
+                        <h2 class="text-base font-bold text-brand-dark border-b pb-3">تعديل بيانات التواصل الأساسية</h2>
+                        
+                        <form onsubmit="saveAdminSettings(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">رقم الهاتف الرسمي</label>
+                                <input type="text" id="setting-phone" class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-brand-teal" dir="ltr">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">رقم الواتساب (بالصيغة الدولية دون +)</label>
+                                <input type="text" id="setting-whatsapp" class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-brand-teal" dir="ltr">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">عنوان الشركة والنطاق</label>
+                                <input type="text" id="setting-address" class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-brand-teal">
+                            </div>
+                            <button type="submit" class="w-full bg-brand-dark text-white font-bold py-3 rounded-xl text-xs hover:bg-slate-800 transition">
+                                حفظ التغييرات وتحديث الموقع
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Floating WhatsApp Button -->
+    <a id="floating-whatsapp" href="https://wa.me/963911223344" target="_blank" class="whatsapp-btn fixed bottom-6 left-6 z-40 bg-emerald-500 hover:bg-emerald-600 text-white p-4 rounded-full shadow-2xl flex items-center justify-center text-2xl transition transform hover:scale-110" title="تواصل معنا عبر واتساب">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Admin Login Modal -->
+    <div id="admin-login-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-slate-100 space-y-6">
+            <div class="text-center space-y-2">
+                <div class="w-12 h-12 bg-brand-dark/10 text-brand-dark rounded-2xl flex items-center justify-center mx-auto text-xl">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h3 class="text-xl font-bold text-brand-dark">تسجيل الدخول للوحة التحكم</h3>
+                <p class="text-xs text-slate-500">الرجاء إدخال اسم المستخدم وكلمة المرور الخاصة بالإدارة</p>
+            </div>
+
+            <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">اسم المستخدم</label>
+                    <input type="text" id="login-username" required placeholder="admin" class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-brand-teal">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">كلمة المرور</label>
+                    <input type="password" id="login-password" required placeholder="••••••••" class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-brand-teal">
+                </div>
+                <div class="p-3 bg-slate-50 rounded-xl text-[11px] text-slate-500 border border-slate-200/60">
+                    <span class="font-bold text-slate-700">بيانات الدخول الافتراضية التجريبية:</span><br>
+                    اسم المستخدم: <code class="bg-slate-200 px-1 rounded">admin</code> | كلمة المرور: <code class="bg-slate-200 px-1 rounded">shifa123</code>
+                </div>
+                <div class="flex items-center gap-3 pt-2">
+                    <button type="submit" class="flex-1 bg-brand-teal hover:bg-brand-emerald text-white font-bold py-3 rounded-xl text-xs transition">
+                        تسجيل الدخول
+                    </button>
+                    <button type="button" onclick="closeAdminModal()" class="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl text-xs transition">
+                        إلغاء
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Add / Edit Service -->
+    <div id="service-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-lg w-full shadow-2xl space-y-4">
+            <h3 id="service-modal-title" class="text-lg font-bold text-brand-dark">إضافة خدمة جديدة</h3>
+            <form onsubmit="handleSaveService(event)" class="space-y-3">
+                <input type="hidden" id="service-form-id">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">اسم الخدمة</label>
+                    <input type="text" id="service-form-title" required class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-brand-teal">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">الوصف المختصر</label>
+                    <textarea id="service-form-desc" rows="3" required class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-brand-teal"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">فئة أيقونة FontAwesome</label>
+                    <input type="text" id="service-form-icon" placeholder="fa-solid fa-user-nurse" required class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-brand-teal" dir="ltr">
+                </div>
+                <div class="flex gap-2 pt-2">
+                    <button type="submit" class="flex-1 bg-brand-teal text-white font-bold py-2.5 rounded-xl text-xs">حفظ الخدمة</button>
+                    <button type="button" onclick="closeServiceModal()" class="px-4 py-2.5 bg-slate-100 text-slate-600 font-bold rounded-xl text-xs">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Order Details View Modal -->
+    <div id="order-details-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="font-bold text-brand-dark text-base">تفاصيل الطلب</h3>
+                <button onclick="closeOrderDetailsModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div id="order-modal-content" class="space-y-3 text-xs text-slate-700">
+                <!-- Javascript Filled -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark text-white border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Col 1: Brand Info -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-teal to-brand-emerald flex items-center justify-center text-white font-black text-xl">
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+                        <span class="text-xl font-black text-white">شفاء بلس</span>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        شركة متخصصة في تقديم خدمات الرعاية الصحية والتمريض المنزلي في مدينة حمص بأرقى المعايير وأعلى مستويات الخصوصية والاهتمام.
+                    </p>
+                </div>
+
+                <!-- Col 2: Navigation Links -->
+                <div class="space-y-3">
+                    <h4 class="font-bold text-sm text-brand-teal">روابط الصفحات</h4>
+                    <ul class="space-y-2 text-xs text-slate-300">
+                        <li><button onclick="navigateTo('home')" class="hover:text-brand-teal transition">الصفحة الرئيسية</button></li>
+                        <li><button onclick="navigateTo('services')" class="hover:text-brand-teal transition">خدماتنا الطبية</button></li>
+                        <li><button onclick="navigateTo('about')" class="hover:text-brand-teal transition">من نحن</button></li>
+                        <li><button onclick="navigateTo('faq')" class="hover:text-brand-teal transition">الأسئلة الشائعة</button></li>
+                        <li><button onclick="navigateTo('contact')" class="hover:text-brand-teal transition">صفحة التواصل</button></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Services Short -->
+                <div class="space-y-3">
+                    <h4 class="font-bold text-sm text-brand-teal">الخدمات الرئيسية</h4>
+                    <ul class="space-y-2 text-xs text-slate-300">
+                        <li><button onclick="navigateTo('services')" class="hover:text-brand-teal transition">التمريض المنزلي الشامل</button></li>
+                        <li><button onclick="navigateTo('services')" class="hover:text-brand-teal transition">سحب عينات التحاليل من المنزل</button></li>
+                        <li><button onclick="navigateTo('services')" class="hover:text-brand-teal transition">رعاية ودعم كبار السن</button></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Contact Summary -->
+                <div class="space-y-3">
+                    <h4 class="font-bold text-sm text-brand-teal">تواصل سريع</h4>
+                    <p class="text-xs text-slate-300">حمص، سوريا</p>
+                    <p class="text-xs text-slate-300" dir="ltr" id="footer-phone-display">+963 911 223 344</p>
+                    <div class="pt-2">
+                        <button onclick="openAdminModal()" class="text-[11px] text-slate-400 hover:text-white transition flex items-center gap-1">
+                            <i class="fa-solid fa-lock text-xs"></i>
+                            <span>دخول إدارة الموقع</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-slate-800 mt-10 pt-6 text-center text-xs text-slate-500">
+                <p>© 2026 شركة «شفاء بلس للخدمات الطبية». جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Default Services Data
+        const defaultServices = [
+            {
+                id: 'nursing',
+                title: 'التمريض المنزلي',
+                icon: 'fa-solid fa-user-nurse',
+                description: 'تقديم العناية التمريضية بمهنية، وتشمل متابعة العلامات الحيوية، العناية بالجروح، وإعطاء الأدوية أو المغذيات بموجب وصفة طبية معتمدة.',
+                details: 'تعتبر خدمة التمريض المنزلي خياراً مثالياً للمرضى الذين يحتاجون متابعة دورية عقب المشفى أو للتعافي في البيئة المنزلية. نقوم بتقديم الرعاية بعناية فائقة ووفق تعليمات الطبيب المعالج.'
+            },
+            {
+                id: 'lab-samples',
+                title: 'سحب عينات التحاليل من المنزل',
+                icon: 'fa-solid fa-vial',
+                description: 'سحب الدم والعينات من المنزل مع حفظها ونقلها الآمن والتنسيق مع أفضل المخابر الطبية المعتمدة في مدينة حمص.',
+                details: 'نوفر على المريض وعائلته عناء الانتقال إلى المخبر. يتم تحديد الموعد والمنطقة، وسحب العينات بدقة معقمة واحترافية وتوصيل النتائج للعميل.'
+            },
+            {
+                id: 'elderly-care',
+                title: 'رعاية كبار السن',
+                icon: 'fa-solid fa-hands-holding-child',
+                description: 'خدمة الرعاية اليومية والمساعدة الشخصية لكبار السن لتوفير الراحة والاهتمام والدعم النفسي والبدني في منازلهم.',
+                details: 'نساعد العائلات على توفير الاهتمام المطلوب لآبائهم وأمهاتهم من خلال الدعم المباشر، المساعدة في الأنشطة اليومية، والتأكد من راحتهم مع الاحترام الكامل لقدرهم.'
+            }
+        ];
+
+        // Default FAQ Data
+        const faqItems = [
+            {
+                q: 'كيف أطلب خدمة منزلية من شفاء بلس؟',
+                a: 'يمكنك طلب الخدمة بسهولة عبر ملء النموذج في صفحة "طلب خدمة" أو بالتواصل المباشر معنا عبر الاتصال الهاتفي أو رسائل الواتساب.'
+            },
+            {
+                q: 'ما المناطق التي تغطيها الشركة؟',
+                a: 'نغطي كافة أحياء مدينة حمص (مثل الإنشاءات، الوعر، الخضر، الحمراء...) بالإضافة إلى المناطق القريبة والمحيطة بها.'
+            },
+            {
+                q: 'كيف يتم تحديد الموعد وتأكيده؟',
+                a: 'بعد إرسال الطلب عبر الموقع، يتواصل معك فريقنا خلال وقت قصير لتأكيد تفاصيل العنوان والموعد المناسب وتنسيق الزيارة.'
+            },
+            {
+                q: 'هل يمكن الاستفسار عن تكلفة الخدمة قبل الحجز؟',
+                a: 'نعم بالتأكيد، يمكنك التواصل معنا عبر الواتساب أو الهاتف لمعرفة تفاصيل تكلفة الخدمة والنطاق قبل إتمام الحجز.'
+            },
+            {
+                q: 'كيف يتم تأكيد الطلب؟',
+                a: 'يتم التأكيد عبر اتصال هاتفي أو رسالة واتساب من فريقنا، وتتغير حالة طلبك في نظامنا إلى "مؤكد".'
+            }
+        ];
+
+        // Sample Seed Orders
+        const initialOrders = [
+            {
+                id: 'ORD-1001',
+                name: 'خالد العبدالله',
+                phone: '0933112233',
+                service: 'التمريض المنزلي',
+                location: 'حمص - حي الإنشاءات',
+                date: 'اليوم الساعة 4 مساءً',
+                notes: 'تبديل ضماد على جرح جراحي',
+                status: 'جديد',
+                createdAt: new Date().toLocaleDateString('ar-SY')
+            },
+            {
+                id: 'ORD-1002',
+                name: 'سميرة الحمصي',
+                phone: '0944556677',
+                service: 'سحب عينات التحاليل من المنزل',
+                location: 'حمص - الوعر',
+                date: 'غداً 9 صباحاً',
+                notes: 'تحليل سكر وتعداد دم كامل',
+                status: 'مؤكد',
+                createdAt: new Date().toLocaleDateString('ar-SY')
+            }
+        ];
+
+        // LocalStorage State Management
+        let appServices = JSON.parse(localStorage.getItem('shifa_services')) || defaultServices;
+        let appOrders = JSON.parse(localStorage.getItem('shifa_orders')) || initialOrders;
+        let appSettings = JSON.parse(localStorage.getItem('shifa_settings')) || {
+            phone: '+963 911 223 344',
+            whatsapp: '963911223344',
+            address: 'مدينة حمص، سوريا - تغطية شاملة'
+        };
+        let isAdminLoggedIn = sessionStorage.getItem('shifa_admin_logged') === 'true';
+        let currentStatusFilter = 'all';
+
+        // Initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            renderServices();
+            renderFAQs();
+            applySettingsUI();
+            checkBookingDraft();
+            populateBookingServiceDropdown();
+            
+            if (isAdminLoggedIn) {
+                renderAdminOrders();
+            }
+        });
+
+        // Navigation Controller
+        function navigateTo(viewId) {
+            document.querySelectorAll('.page-view').forEach(el => el.classList.add('hidden'));
+            const targetView = document.getElementById(`view-${viewId}`);
+            if (targetView) targetView.classList.remove('hidden');
+
+            // Update Header Nav States
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+            const activeNav = document.getElementById(`nav-${viewId}`);
+            if (activeNav) activeNav.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Render Dynamic Services in UI
+        function renderServices() {
+            // Home preview grid
+            const homeGrid = document.getElementById('home-services-grid');
+            homeGrid.innerHTML = appServices.map(srv => `
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition space-y-4 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="w-12 h-12 rounded-xl bg-brand-teal/10 text-brand-teal flex items-center justify-center text-xl">
+                            <i class="${srv.icon}"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-lg">${srv.title}</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">${srv.description}</p>
+                    </div>
+                    <button onclick="selectServiceAndBook('${srv.title}')" class="w-full py-2.5 bg-slate-50 hover:bg-brand-teal hover:text-white font-bold text-xs text-brand-dark rounded-xl transition border border-slate-200/60">
+                        طلب هذه الخدمة
+                    </button>
+                </div>
+            `).join('');
+
+            // Full services view
+            const fullList = document.getElementById('full-services-list');
+            fullList.innerHTML = appServices.map((srv, idx) => `
+                <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-sm grid md:grid-cols-12 gap-6 items-center">
+                    <div class="md:col-span-8 space-y-3">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-brand-teal/10 text-brand-teal rounded-lg text-xs font-bold">
+                            <i class="${srv.icon}"></i>
+                            <span>خدمة معتمدة</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-brand-dark">${srv.title}</h2>
+                        <p class="text-sm text-slate-600 leading-relaxed">${srv.details || srv.description}</p>
+                    </div>
+                    <div class="md:col-span-4 flex flex-col justify-center items-center p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                        <p class="text-xs text-slate-500 mb-3 text-center">ترغب في حجز هذه الخدمة؟</p>
+                        <button onclick="selectServiceAndBook('${srv.title}')" class="w-full bg-brand-teal hover:bg-brand-emerald text-white text-xs font-bold py-3 rounded-xl transition shadow-md shadow-brand-teal/20">
+                            طلب الخدمة الآن
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            populateBookingServiceDropdown();
+        }
+
+        // Render FAQs with Accordions
+        function renderFAQs() {
+            const homeContainer = document.getElementById('home-faq-container');
+            const fullContainer = document.getElementById('full-faq-container');
+
+            const faqHTML = faqItems.map((item, idx) => `
+                <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                    <button onclick="toggleAccordion('faq-${idx}')" class="w-full p-4 text-right font-bold text-sm text-brand-dark flex justify-between items-center bg-slate-50/50">
+                        <span>${item.q}</span>
+                        <i class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform" id="icon-faq-${idx}"></i>
+                    </button>
+                    <div id="faq-${idx}" class="accordion-content px-4 py-0 text-xs text-slate-600 leading-relaxed bg-white">
+                        <p class="py-3 border-t border-slate-100">${item.a}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            homeContainer.innerHTML = faqHTML;
+            fullContainer.innerHTML = faqHTML;
+        }
+
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById(`icon-${id}`);
+            content.classList.toggle('active');
+            if (content.classList.contains('active')) {
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Service booking integration
+        function selectServiceAndBook(serviceTitle) {
+            navigateTo('book');
+            const select = document.getElementById('book-service');
+            select.value = serviceTitle;
+            saveBookingDraft();
+        }
+
+        function populateBookingServiceDropdown() {
+            const select = document.getElementById('book-service');
+            if (!select) return;
+            const currentVal = select.value;
+            select.innerHTML = `<option value="">-- اختر الخدمة --</option>` + 
+                appServices.map(s => `<option value="${s.title}">${s.title}</option>`).join('');
+            select.value = currentVal;
+        }
+
+        // LocalStorage Booking Draft auto-save
+        function saveBookingDraft() {
+            const draft = {
+                name: document.getElementById('book-name').value,
+                phone: document.getElementById('book-phone').value,
+                service: document.getElementById('book-service').value,
+                location: document.getElementById('book-location').value,
+                date: document.getElementById('book-date').value,
+                notes: document.getElementById('book-notes').value
+            };
+            localStorage.setItem('shifa_booking_draft', JSON.stringify(draft));
+        }
+
+        function checkBookingDraft() {
+            const savedDraft = localStorage.getItem('shifa_booking_draft');
+            if (savedDraft) {
+                const draft = JSON.parse(savedDraft);
+                if (draft.name || draft.phone || draft.service || draft.location) {
+                    document.getElementById('book-name').value = draft.name || '';
+                    document.getElementById('book-phone').value = draft.phone || '';
+                    document.getElementById('book-service').value = draft.service || '';
+                    document.getElementById('book-location').value = draft.location || '';
+                    document.getElementById('book-date').value = draft.date || '';
+                    document.getElementById('book-notes').value = draft.notes || '';
+                    document.getElementById('draft-notice').classList.remove('hidden');
+                }
+            }
+        }
+
+        function clearBookingDraft() {
+            localStorage.removeItem('shifa_booking_draft');
+            document.getElementById('service-booking-form').reset();
+            document.getElementById('draft-notice').classList.add('hidden');
+            showToast('تم مسح المسودة بنجاح', 'info');
+        }
+
+        // Booking Submit Handler
+        function handleBookingSubmit(e) {
+            e.preventDefault();
+            const newOrder = {
+                id: 'ORD-' + Math.floor(1000 + Math.random() * 9000),
+                name: document.getElementById('book-name').value,
+                phone: document.getElementById('book-phone').value,
+                service: document.getElementById('book-service').value,
+                location: document.getElementById('book-location').value,
+                date: document.getElementById('book-date').value,
+                notes: document.getElementById('book-notes').value,
+                status: 'جديد',
+                createdAt: new Date().toLocaleDateString('ar-SY')
+            };
+
+            appOrders.unshift(newOrder);
+            localStorage.setItem('shifa_orders', JSON.stringify(appOrders));
+            clearBookingDraft();
+
+            showToast('تم إرسال طلبك بنجاح! سيتواصل معك فريقنا قريباً.', 'success');
+            
+            // Redirect to home with thank you
+            setTimeout(() => {
+                navigateTo('home');
+            }, 1800);
+        }
+
+        // Inquiry Submit Handler
+        function handleInquirySubmit(e) {
+            e.preventDefault();
+            e.target.reset();
+            showToast('تم إرسال استفسارك بنجاح. شكراً لتواصلك معنا!', 'success');
+        }
+
+        // Apply Global Settings UI
+        function applySettingsUI() {
+            document.getElementById('hero-phone-display').innerText = appSettings.phone;
+            document.getElementById('footer-phone-display').innerText = appSettings.phone;
+            document.getElementById('contact-info-phone').innerText = appSettings.phone;
+            document.getElementById('contact-info-whatsapp').innerText = '+' + appSettings.whatsapp;
+            document.getElementById('contact-info-address').innerText = appSettings.address;
+
+            const waLink = `https://wa.me/${appSettings.whatsapp}?text=${encodeURIComponent('السلام عليكم، أود الاستفسار عن خدمات شفاء بلس للرعاية المنزلية.')}`;
+            document.getElementById('floating-whatsapp').href = waLink;
+            document.getElementById('hero-whatsapp-btn').href = waLink;
+
+            // Update settings form if exists
+            document.getElementById('setting-phone').value = appSettings.phone;
+            document.getElementById('setting-whatsapp').value = appSettings.whatsapp;
+            document.getElementById('setting-address').value = appSettings.address;
+        }
+
+        function saveAdminSettings(e) {
+            e.preventDefault();
+            appSettings.phone = document.getElementById('setting-phone').value;
+            appSettings.whatsapp = document.getElementById('setting-whatsapp').value;
+            appSettings.address = document.getElementById('setting-address').value;
+
+            localStorage.setItem('shifa_settings', JSON.stringify(appSettings));
+            applySettingsUI();
+            showToast('تم حفظ إعدادات الموقع بنجاح', 'success');
+        }
+
+        // ADMIN PANEL LOGIC & AUTHENTICATION
+        function openAdminModal() {
+            if (isAdminLoggedIn) {
+                navigateTo('admin');
+                renderAdminOrders();
+            } else {
+                document.getElementById('admin-login-modal').classList.remove('hidden');
+            }
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-login-modal').classList.add('hidden');
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('login-username').value;
+            const p = document.getElementById('login-password').value;
+
+            if (u === 'admin' && p === 'shifa123') {
+                isAdminLoggedIn = true;
+                sessionStorage.setItem('shifa_admin_logged', 'true');
+                closeAdminModal();
+                navigateTo('admin');
+                renderAdminOrders();
+                showToast('تم تسجيل الدخول بنجاح كمسؤول', 'success');
+            } else {
+                showToast('اسم المستخدم أو كلمة المرور غير صحيحة', 'error');
+            }
+        }
+
+        function adminLogout() {
+            isAdminLoggedIn = false;
+            sessionStorage.removeItem('shifa_admin_logged');
+            navigateTo('home');
+            showToast('تم تسجيل الخروج بنجاح', 'info');
+        }
+
+        function switchAdminTab(tabName) {
+            document.getElementById('admin-tab-orders').classList.add('hidden');
+            document.getElementById('admin-tab-services').classList.add('hidden');
+            document.getElementById('admin-tab-settings').classList.add('hidden');
+
+            document.getElementById('admin-tab-btn-orders').className = 'px-5 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-50 rounded-lg transition';
+            document.getElementById('admin-tab-btn-services').className = 'px-5 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-50 rounded-lg transition';
+            document.getElementById('admin-tab-btn-settings').className = 'px-5 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-50 rounded-lg transition';
+
+            document.getElementById(`admin-tab-${tabName}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`admin-tab-btn-${tabName}`);
+            activeBtn.className = 'px-5 py-2.5 text-xs font-bold rounded-lg transition text-white bg-brand-teal';
+
+            if (tabName === 'orders') renderAdminOrders();
+            if (tabName === 'services') renderAdminServices();
+        }
+
+        // Admin Orders List & Search
+        function renderAdminOrders() {
+            const tbody = document.getElementById('admin-orders-table-body');
+            const searchVal = document.getElementById('order-search-input').value.toLowerCase();
+            document.getElementById('admin-orders-count').innerText = appOrders.length;
+
+            let filtered = appOrders.filter(o => {
+                const matchSearch = o.name.toLowerCase().includes(searchVal) || 
+                                    o.phone.includes(searchVal) || 
+                                    o.location.toLowerCase().includes(searchVal) ||
+                                    o.id.toLowerCase().includes(searchVal);
+                const matchStatus = (currentStatusFilter === 'all') || (o.status === currentStatusFilter);
+                return matchSearch && matchStatus;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center p-8 text-slate-400">لا يوجد طلبات مطابقة للبحث أو الفلترة.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(o => `
+                <tr class="hover:bg-slate-50/80 transition">
+                    <td class="p-4 font-bold text-brand-dark">${o.id}</td>
+                    <td class="p-4">
+                        <div class="font-bold text-slate-800">${o.name}</div>
+                        <div class="text-[11px] text-slate-500" dir="ltr">${o.phone}</div>
+                    </td>
+                    <td class="p-4 font-semibold text-slate-700">${o.service}</td>
+                    <td class="p-4 text-slate-600">${o.location}</td>
+                    <td class="p-4 text-slate-600">${o.date}</td>
+                    <td class="p-4">${getStatusBadgeHTML(o.status)}</td>
+                    <td class="p-4 text-slate-400 text-[11px]">${o.createdAt}</td>
+                    <td class="p-4 text-center">
+                        <div class="flex items-center justify-center gap-1">
+                            <button onclick="viewOrderDetails('${o.id}')" class="p-1.5 text-slate-500 hover:text-brand-teal" title="عرض التفاصيل"><i class="fa-solid fa-eye"></i></button>
+                            <select onchange="updateOrderStatus('${o.id}', this.value)" class="text-[11px] p-1 border rounded bg-white">
+                                <option value="جديد" ${o.status === 'جديد' ? 'selected' : ''}>جديد</option>
+                                <option value="قيد التواصل" ${o.status === 'قيد التواصل' ? 'selected' : ''}>قيد التواصل</option>
+                                <option value="مؤكد" ${o.status === 'مؤكد' ? 'selected' : ''}>مؤكد</option>
+                                <option value="مكتمل" ${o.status === 'مكتمل' ? 'selected' : ''}>مكتمل</option>
+                                <option value="ملغى" ${o.status === 'ملغى' ? 'selected' : ''}>ملغى</option>
+                            </select>
+                            <button onclick="deleteOrder('${o.id}')" class="p-1.5 text-slate-400 hover:text-red-600" title="حذف الطلب"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function getStatusBadgeHTML(status) {
+            const classes = {
+                'جديد': 'bg-blue-100 text-blue-800',
+                'قيد التواصل': 'bg-amber-100 text-amber-800',
+                'مؤكد': 'bg-emerald-100 text-emerald-800',
+                'مكتمل': 'bg-purple-100 text-purple-800',
+                'ملغى': 'bg-rose-100 text-rose-800'
+            };
+            return `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${classes[status] || 'bg-slate-100'}">${status}</span>`;
+        }
+
+        function filterOrdersByStatus(status) {
+            currentStatusFilter = status;
+            renderAdminOrders();
+        }
+
+        function updateOrderStatus(orderId, newStatus) {
+            const order = appOrders.find(o => o.id === orderId);
+            if (order) {
+                order.status = newStatus;
+                localStorage.setItem('shifa_orders', JSON.stringify(appOrders));
+                renderAdminOrders();
+                showToast(`تم تغيير حالة الطلب ${orderId} إلى ${newStatus}`, 'info');
+            }
+        }
+
+        function deleteOrder(orderId) {
+            if (confirm(`هل أنت تأكد من رغبتك في حذف الطلب ${orderId}؟`)) {
+                appOrders = appOrders.filter(o => o.id !== orderId);
+                localStorage.setItem('shifa_orders', JSON.stringify(appOrders));
+                renderAdminOrders();
+                showToast('تم حذف الطلب بنجاح', 'info');
+            }
+        }
+
+        function viewOrderDetails(orderId) {
+            const o = appOrders.find(item => item.id === orderId);
+            if (!o) return;
+
+            const modal = document.getElementById('order-details-modal');
+            const content = document.getElementById('order-modal-content');
+
+            content.innerHTML = `
+                <div class="space-y-2">
+                    <p><span class="font-bold text-slate-900">رقم الطلب:</span> ${o.id}</p>
+                    <p><span class="font-bold text-slate-900">اسم العميل:</span> ${o.name}</p>
+                    <p><span class="font-bold text-slate-900">رقم الهاتف:</span> <a href="tel:${o.phone}" class="text-brand-teal font-bold">${o.phone}</a></p>
+                    <p><span class="font-bold text-slate-900">الخدمة:</span> ${o.service}</p>
+                    <p><span class="font-bold text-slate-900">المنطقة/الحي:</span> ${o.location}</p>
+                    <p><span class="font-bold text-slate-900">الموعد المفضّل:</span> ${o.date}</p>
+                    <p><span class="font-bold text-slate-900">الملاحظات:</span> ${o.notes || 'لا يوجد'}</p>
+                    <p><span class="font-bold text-slate-900">الحالة الحالية:</span> ${o.status}</p>
+                </div>
+                <div class="pt-3 border-t flex justify-end">
+                    <a href="https://wa.me/${o.phone.replace(/[^0-9]/g, '')}" target="_blank" class="px-4 py-2 bg-emerald-500 text-white font-bold rounded-xl text-xs flex items-center gap-1">
+                        <i class="fa-brands fa-whatsapp"></i> فتح واتساب للعميل
+                    </a>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        function closeOrderDetailsModal() {
+            document.getElementById('order-details-modal').classList.add('hidden');
+        }
+
+        // Services Admin CRUD
+        function renderAdminServices() {
+            const grid = document.getElementById('admin-services-grid');
+            grid.innerHTML = appServices.map(srv => `
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                    <div class="flex justify-between items-start">
+                        <div class="w-10 h-10 rounded-xl bg-brand-teal/10 text-brand-teal flex items-center justify-center text-lg">
+                            <i class="${srv.icon}"></i>
+                        </div>
+                        <div class="flex gap-1">
+                            <button onclick="editService('${srv.id}')" class="p-1.5 text-slate-400 hover:text-brand-dark"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteService('${srv.id}')" class="p-1.5 text-slate-400 hover:text-red-600"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-base">${srv.title}</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">${srv.description}</p>
+                </div>
+            `).join('');
+        }
+
+        function openAddServiceModal() {
+            document.getElementById('service-modal-title').innerText = 'إضافة خدمة جديدة';
+            document.getElementById('service-form-id').value = '';
+            document.getElementById('service-form-title').value = '';
+            document.getElementById('service-form-desc').value = '';
+            document.getElementById('service-form-icon').value = 'fa-solid fa-user-nurse';
+            document.getElementById('service-modal').classList.remove('hidden');
+        }
+
+        function editService(srvId) {
+            const srv = appServices.find(s => s.id === srvId);
+            if (!srv) return;
+            document.getElementById('service-modal-title').innerText = 'تعديل الخدمة';
+            document.getElementById('service-form-id').value = srv.id;
+            document.getElementById('service-form-title').value = srv.title;
+            document.getElementById('service-form-desc').value = srv.description;
+            document.getElementById('service-form-icon').value = srv.icon;
+            document.getElementById('service-modal').classList.remove('hidden');
+        }
+
+        function closeServiceModal() {
+            document.getElementById('service-modal').classList.add('hidden');
+        }
+
+        function handleSaveService(e) {
+            e.preventDefault();
+            const id = document.getElementById('service-form-id').value;
+            const title = document.getElementById('service-form-title').value;
+            const desc = document.getElementById('service-form-desc').value;
+            const icon = document.getElementById('service-form-icon').value;
+
+            if (id) {
+                // Update
+                const srv = appServices.find(s => s.id === id);
+                if (srv) {
+                    srv.title = title;
+                    srv.description = desc;
+                    srv.icon = icon;
+                }
+            } else {
+                // Add
+                appServices.push({
+                    id: 'srv-' + Date.now(),
+                    title: title,
+                    description: desc,
+                    details: desc,
+                    icon: icon
+                });
+            }
+
+            localStorage.setItem('shifa_services', JSON.stringify(appServices));
+            renderServices();
+            renderAdminServices();
+            closeServiceModal();
+            showToast('تم حفظ التغييرات في الخدمات', 'success');
+        }
+
+        function deleteService(srvId) {
+            if (confirm('هل أنت تأكد من رغبتك في حذف هذه الخدمة؟')) {
+                appServices = appServices.filter(s => s.id !== srvId);
+                localStorage.setItem('shifa_services', JSON.stringify(appServices));
+                renderServices();
+                renderAdminServices();
+                showToast('تم حذف الخدمة', 'info');
+            }
+        }
+
+        // Custom Toast Notification System
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            const bgColors = {
+                success: 'bg-emerald-600 text-white',
+                error: 'bg-rose-600 text-white',
+                info: 'bg-brand-dark text-white'
+            };
+
+            toast.className = `pointer-events-auto px-4 py-3 rounded-xl shadow-xl text-xs font-bold flex items-center gap-2 transform transition-all duration-300 translate-y-[-10px] opacity-0 ${bgColors[type]}`;
+            toast.innerHTML = `
+                <i class="fa-solid ${type === 'success' ? 'fa-circle-check' : type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-info'}"></i>
+                <span>${message}</span>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-[-10px]', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-[-10px]');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
